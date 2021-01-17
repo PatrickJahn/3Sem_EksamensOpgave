@@ -6,8 +6,10 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,24 +27,22 @@ public class Searches implements Serializable {
     
     @Id
     private Date dateTime;
-    
-    
-    
-    @ManyToMany
-    @JoinTable(name = "searches_breed", joinColumns = {
-    @JoinColumn(name = "dateTime", referencedColumnName = "dateTime")}, inverseJoinColumns = {
-    @JoinColumn(name = "breed", referencedColumnName = "breed")})
-    private List<Breed> breed;
 
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "searches_breed", joinColumns = {
+    @JoinColumn(name = "date", referencedColumnName = "dateTime")}, inverseJoinColumns = {
+    @JoinColumn(name = "breed", referencedColumnName = "breed")})
+    private List<Breed> breeds = new ArrayList();
     
-    public Searches(){}
     
-    public Searches(Breed breed) {
-        this.breed.add(breed);
+    
+    public Searches() {
         this.dateTime = new Date();
     }
-
     
+   public void addBreed(Breed b){
+       this.breeds.add(b);
+   }
     
   
 }

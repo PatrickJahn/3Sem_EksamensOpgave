@@ -2,9 +2,12 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import entities.Breed;
 import entities.User;
+import facades.DogFacade;
 import facades.RemoteServerFacade;
 import facades.UserFacade;
+import java.util.HashMap;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
@@ -17,9 +20,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import security.errorhandling.AuthenticationException;
+import security.errorhandling.DogException;
 import utils.EMF_Creator;
 
 /**
@@ -32,6 +37,7 @@ public class DemoResource {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
    private static final RemoteServerFacade remoteFACADE =  RemoteServerFacade.getRemoteServerFacade(EMF);
        private static final UserFacade FACADE =  UserFacade.getUserFacade(EMF);
+       private static final DogFacade dogFACADE =  DogFacade.getDogFacade(EMF);
 
     @Context
     private UriInfo context;
@@ -95,4 +101,34 @@ public class DemoResource {
           return "{\"msg\": \"Ny bruger oprettet: " + newUser.getUserName() + "\"}";
     }
     
+    
+     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("admin/searches")
+    public String getAllSearches() throws DogException {
+            long count = dogFACADE.getAllSearches();
+          return "{\"searches\": \""+ count+ "\"}";
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("admin/searches/{breed}")
+    public String getAllSearchesForBreed(@PathParam("breed") String breed) throws DogException {
+            long count = dogFACADE.getAllSearchesForBreed(breed);
+          return "{\"searches\": \""+ count+ "\"}";
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("admin/allsearches")
+    public String getAllSearchesForAllBreeds() throws DogException {
+            List<Breed> breeds = dogFACADE.getAllSearchesForAllBreeds();
+            
+            HashMap<String, Number> d = new HashMap(); 
+            for (Breed b : breeds){
+                d.put(b.getBreed(), b.getSearches().size());
+            }
+            
+          return GSON.toJson(d);
+    }
 }   

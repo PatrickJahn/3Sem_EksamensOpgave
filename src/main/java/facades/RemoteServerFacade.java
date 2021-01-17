@@ -55,9 +55,11 @@ public class RemoteServerFacade {
     public breedDTO getAllBreeds() throws IOException, API_Exception{
      breedDTO breed;
         try {
-            
+   
              String breedJson = HttpUtils.fetchData("https://dog-info.cooljavascript.dk/api/breed");
              breed = GSON.fromJson(breedJson, breedDTO.class);
+             
+             saveAllBreeds(breed);
                
         } catch(Exception e){
            throw new API_Exception(e.getMessage());
@@ -76,8 +78,8 @@ public class RemoteServerFacade {
         String imageUrl = "https://dog-image.cooljavascript.dk/api/breed/random-image/" + breed;      
         
         breedDetailDTO details = giveThreadsGetDetails(informationUrl, factURL, imageUrl);
+                 saveSearchOfEnpoint(details);
        
-   
         
         return details;
         
@@ -122,5 +124,49 @@ public class RemoteServerFacade {
      
      
      
+     private void saveSearchOfEnpoint(breedDetailDTO details) throws API_Exception{
+         
+         EntityManager em = emf.createEntityManager();
+          Breed breed = new Breed(details.getBreed(), details.getInfo());
+          Searches s = new Searches();
+        
+         
+         try {
+             
+            
+             em.getTransaction().begin();
+            Breed b = em.find(Breed.class, details.getBreed());
+            b.setInfo(details.getInfo());
+            b.addSearch(s);
+             em.getTransaction().commit();
+         } catch (Exception e){
+            throw new API_Exception(e.getMessage());
+         }
+                
+         
+     }
      
+     
+      private void saveAllBreeds(breedDTO breeds) throws API_Exception{
+         
+         EntityManager em = emf.createEntityManager();
+         
+         
+         try {
+             
+            if (em.find(Breed.class, "boxer") != null){
+                return ;
+            } 
+             em.getTransaction().begin();
+             for (breedDTO b : breeds.getDogs()){
+                          em.persist(new Breed(b.getBreed(), ""));
+
+                      }
+             em.getTransaction().commit();
+         } catch (Exception e){
+            throw new API_Exception(e.getMessage());
+         }
+                
+         
+     }
 }

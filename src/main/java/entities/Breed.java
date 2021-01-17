@@ -6,14 +6,19 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -28,11 +33,12 @@ public class Breed implements Serializable {
     @Id
     private String breed;
     
+    @Column(length = 1025)
     private String info;
     
-    @ManyToMany(mappedBy = "breed", cascade = CascadeType.PERSIST)
-    private List<Searches> searches;
-    
+  
+    @ManyToMany(mappedBy = "breeds", cascade = CascadeType.PERSIST)
+   List<Searches> searches = new ArrayList<>();
 
     public Breed() {}
     
@@ -41,6 +47,15 @@ public class Breed implements Serializable {
         this.info = info;
     }
 
+    
+    public List<Searches> getSearches(){
+        return this.searches;
+    }
+    public void addSearch(Searches s){
+        s.addBreed(this);
+        this.searches.add(s);
+    }
+    
     public String getBreed() {
         return breed;
     }
@@ -56,6 +71,7 @@ public class Breed implements Serializable {
     public void setInfo(String info) {
         this.info = info;
     }
+
 
   
     

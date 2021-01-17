@@ -13,9 +13,13 @@ import entities.Dog;
 import entities.User;
 import errorhandling.API_Exception;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import static org.eclipse.persistence.expressions.ExpressionOperator.count;
 import security.errorhandling.DogException;
 
 /**
@@ -101,4 +105,54 @@ public class DogFacade {
        return newDog;
    }
     
+   
+   
+   public long getAllSearches() throws DogException{
+         EntityManager em = emf.createEntityManager();
+         Long count;
+         try {
+ 
+        em.getTransaction().begin();
+             TypedQuery<Long> query = em.createQuery("SELECT COUNT(s) FROM Searches s" , Long.class);
+           count = query.getSingleResult();
+          em.getTransaction().commit();
+           
+         } catch(Exception e){
+             throw new DogException(e.getMessage());
+         }
+         return count;
+   }
+   
+     public int getAllSearchesForBreed(String breed) throws DogException{
+         EntityManager em = emf.createEntityManager();
+         int count;
+         try {
+ 
+        em.getTransaction().begin();
+         Breed b = em.find(Breed.class, breed);
+        count = b.getSearches().size();
+          em.getTransaction().commit();
+           
+         } catch(Exception e){
+             throw new DogException(e.getMessage());
+         }
+         return count;
+   }
+     
+      public List<Breed> getAllSearchesForAllBreeds() throws DogException{
+         EntityManager em = emf.createEntityManager();
+         List<Breed> breeds;
+         try {
+ 
+        em.getTransaction().begin();
+          TypedQuery<Breed> query = em.createQuery("SELECT b FROM Breed b" , Breed.class);
+            breeds = query.getResultList();
+          em.getTransaction().commit();
+           
+         } catch(Exception e){
+             throw new DogException(e.getMessage());
+         }
+         return breeds;
+   }
+     
 }
