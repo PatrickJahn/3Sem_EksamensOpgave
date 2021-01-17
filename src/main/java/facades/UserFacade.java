@@ -1,8 +1,12 @@
 package facades;
 
+import entities.Role;
 import entities.User;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.RollbackException;
 import security.errorhandling.AuthenticationException;
 
 /**
@@ -43,4 +47,36 @@ public class UserFacade {
         return user;
     }
 
+    
+    
+      public User addNewUser(User newUser) throws AuthenticationException{
+        
+        
+         if (newUser.getUserName().isEmpty() || newUser.getUserPass().isEmpty() ) {
+                throw new AuthenticationException("User name or password must not be empty");   
+            }
+        
+          EntityManager em = emf.createEntityManager();
+        
+          User user = new User(newUser.getUserName(), newUser.getUserPass());
+      
+            user.addRole(new Role("user"));
+         
+        try {
+          em.getTransaction().begin();
+          em.persist(user);
+          em.getTransaction().commit();
+           
+        } catch (RollbackException e) {
+            throw new AuthenticationException("User already exist. Try another username");
+            
+        } catch (Exception e){
+              throw new AuthenticationException("Something went wrong. Server may be unavailable at the moment");
+        } finally {
+            em.close();
+        }
+        return user;
+
+        
+    }
 }

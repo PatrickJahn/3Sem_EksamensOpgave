@@ -68,9 +68,7 @@ public class RenameMeResourceTest {
         User u = new User("Bobby", "123456");
        
         try {
-            em.getTransaction().begin();
-
-            em.getTransaction().commit();
+          
               em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
             em.createQuery("delete from User").executeUpdate();
