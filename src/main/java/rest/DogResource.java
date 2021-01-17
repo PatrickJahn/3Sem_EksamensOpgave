@@ -2,11 +2,13 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.breedDTO;
 import dto.dogDTO;
 import entities.Dog;
 import errorhandling.API_Exception;
 import facades.DogFacade;
 import facades.RemoteServerFacade;
+import java.io.IOException;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
@@ -77,5 +79,16 @@ public class DogResource {
     }
     
     
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("breeds")
+    public String getBreeds() throws IOException, API_Exception {
+  
+        
+            breedDTO breeds = remoteFACADE.getAllBreeds();
+       
+          return GSON.toJson(breeds.getDogs());
+    }
     
 }   

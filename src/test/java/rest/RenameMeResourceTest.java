@@ -120,7 +120,6 @@ public class RenameMeResourceTest {
 
     //This test assumes the database contains two rows
     @Test
-    @Disabled
     public void testDummyMsg() throws Exception {
         given()
                 .contentType("application/json")
@@ -130,15 +129,16 @@ public class RenameMeResourceTest {
                 .body("msg", equalTo("Hello anonymous"));
     }
 
-    @Test
-    @Disabled
-    public void testCount() throws Exception {
+
+    
+     @Test
+    public void testGetAllBreeds() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/info/all").then()
+                .get("/dog/breeds").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("count", equalTo(2));
+                .body("breed[0]", equalTo("beagle"));
     }
     
    

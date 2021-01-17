@@ -7,19 +7,11 @@ package facades;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dto.characterDTO;
-import dto.filmDTO;
-import dto.combinedDTO;
-import dto.planetDTO;
+import dto.breedDTO;
 import errorhandling.API_Exception;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import javax.persistence.EntityManager;
+import static javafx.scene.input.KeyCode.G;
 import javax.persistence.EntityManagerFactory;
 import utils.HttpUtils;
 
@@ -50,6 +42,19 @@ public class RemoteServerFacade {
     }
     
     
-   
+    
+    public breedDTO getAllBreeds() throws IOException, API_Exception{
+     breedDTO breed;
+        try {
+            
+             String breedJson = HttpUtils.fetchData("https://dog-info.cooljavascript.dk/api/breed");
+             breed = GSON.fromJson(breedJson, breedDTO.class);
+               
+        } catch(Exception e){
+           throw new API_Exception(e.getMessage());
+        }
+        
+        return breed;
+    }
    
 }
