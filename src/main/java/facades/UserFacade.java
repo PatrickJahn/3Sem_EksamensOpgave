@@ -58,18 +58,21 @@ public class UserFacade {
         
           EntityManager em = emf.createEntityManager();
         
-          User user = new User(newUser.getUserName(), newUser.getUserPass());
+          User user = new User("Bruger1", "bruger");
       
-          
+       User user2 = new User("Admin1", "admin");
             user.addRole(new Role("user"));
-         
+         user2.addRole(new Role("admin"));
         try {
           em.getTransaction().begin();
+            em.persist(new Role("user"));
+          em.persist(new Role("admin"));
           em.persist(user);
+          em.persist(user2);
           em.getTransaction().commit();
            
         } catch (RollbackException e) {
-            throw new AuthenticationException("User already exist. Try another username");
+            throw new AuthenticationException("User already exist. Try another username"+ e.getMessage());
             
         } catch (Exception e){
               throw new AuthenticationException("Something went wrong. Server may be unavailable at the moment");
