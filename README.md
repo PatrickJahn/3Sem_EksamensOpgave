@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/PatrickJahn/3Sem_EksamensOpgave.svg?branch=master)](https://travis-ci.org/PatrickJahn/3Sem_EksamensOpgave)
 
-## OBS Link til frontend del:  https://github.com/PatrickJahn/ca3_pesonal_frontend
+## OBS Link til frontend del:  https://github.com/PatrickJahn/3Sem_EksamensOpgave_frontend
 
 ## Eksamens Opgave - How to use
 ### Preconditions
