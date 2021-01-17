@@ -143,6 +143,7 @@ public class RenameMeResourceTest {
     }
     
     @Test
+    @Disabled
     public void testGetBreedDetail() throws Exception {
         given()
                 .contentType("application/json")
