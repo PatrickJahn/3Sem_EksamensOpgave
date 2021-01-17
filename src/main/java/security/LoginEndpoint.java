@@ -38,7 +38,7 @@ public class LoginEndpoint {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(String jsonString) throws AuthenticationException, API_Exception {
+    public String login(String jsonString) throws AuthenticationException, API_Exception {
         String username;
         String password;
         try {
@@ -55,12 +55,7 @@ public class LoginEndpoint {
             JsonObject responseJson = new JsonObject();
             responseJson.addProperty("username", username);
             responseJson.addProperty("token", token);
-            return Response.ok()
-               .header("Access-Control-Allow-Origin", "*")
-               .header("Access-Control-Allow-Credentials", "true")
-               .header("Access-Control-Allow-Headers","origin, content-type, accept, authorization")
-               .header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS, HEAD")
-               .entity(new Gson().toJson(responseJson)).build();
+            return new Gson().toJson(responseJson);
                
                
 
