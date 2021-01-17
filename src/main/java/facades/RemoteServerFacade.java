@@ -132,8 +132,7 @@ public class RemoteServerFacade {
         
          
          try {
-             
-            
+               
              em.getTransaction().begin();
             Breed b = em.find(Breed.class, details.getBreed());
             b.setInfo(details.getInfo());

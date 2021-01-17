@@ -26,7 +26,7 @@ public class Searches implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
-    private Date dateTime;
+    private String dateTime;
 
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "searches_breed", joinColumns = {
@@ -37,7 +37,7 @@ public class Searches implements Serializable {
     
     
     public Searches() {
-        this.dateTime = new Date();
+        this.dateTime = "" + new Date();
     }
     
    public void addBreed(Breed b){
