@@ -2,10 +2,12 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.dogDTO;
 import entities.Dog;
 import errorhandling.API_Exception;
 import facades.DogFacade;
 import facades.RemoteServerFacade;
+import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
@@ -17,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+import security.errorhandling.DogException;
 import utils.EMF_Creator;
 
 /**
@@ -50,14 +53,14 @@ public class DogResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("add")
     @RolesAllowed("user")
-    public String addNewDog(String dogJson) throws API_Exception {
+    public String addNewDog(String dogJson) throws API_Exception, DogException {
         String thisuser = securityContext.getUserPrincipal().getName();
         
         Dog newDog = GSON.fromJson(dogJson, Dog.class);
         
         FACADE.AddNewDog(newDog, thisuser);
         
-        return "{\"msg\": \"Hello to User: " + thisuser + "\"}";
+        return "{\"msg\": \"Dog added for User: " + thisuser + "\"}";
    
     }
 
@@ -65,9 +68,12 @@ public class DogResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("mydogs")
     @RolesAllowed("user")
-    public String getUsersDogs() {
+    public String getUsersDogs() throws DogException {
         String thisuser = securityContext.getUserPrincipal().getName();
-          return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
+        
+            List<dogDTO> dogs = FACADE.getUsersDogs(thisuser);
+       
+          return GSON.toJson(dogs);
     }
     
     

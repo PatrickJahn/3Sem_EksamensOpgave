@@ -36,12 +36,20 @@ public class DogFacadeTest {
                try {
 
          User u = new User("bobby", "123456");
+       User u2 = new User("dogman", "123456");
+       Dog dog = new Dog("dogmansdog", "20-20-2002", "info", "bulldog");
+        dog.setUser(u2);
      
          em.getTransaction().begin();
+              em.createQuery("delete from Dog").executeUpdate();
+                  em.createQuery("delete from Breed").executeUpdate();
+         
            em.createQuery("delete from User").executeUpdate();
-   em.createQuery("delete from Dog").executeUpdate();
-      em.createQuery("delete from Breed").executeUpdate();
+        
+      
          em.persist(u);
+           em.persist(u2);
+         em.persist(dog);
          em.getTransaction().commit();
 
                }
@@ -60,11 +68,13 @@ public class DogFacadeTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
+        
+        
         try {
             em.getTransaction().begin();
-          
-  em.createQuery("delete from Dog").executeUpdate();
-      em.createQuery("delete from Breed").executeUpdate();
+        
+  
+    
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -81,7 +91,7 @@ public class DogFacadeTest {
     public void testAddDog() throws API_Exception, DogException{
         EntityManager em = emf.createEntityManager();
         
-        Dog newDog = new Dog("testDog1", "20-10-2002", "info text", new Breed("mops", "info"));
+        Dog newDog = new Dog("testDog1", "20-10-2002", "info text", "mops");
         dogFacade.AddNewDog(newDog, "bobby");
         
         User u = em.find(User.class, "bobby");
@@ -94,7 +104,7 @@ public class DogFacadeTest {
     public void negativeTestAddDogNoName() throws API_Exception, DogException{
             EntityManager em = emf.createEntityManager();
         
-        Dog newDog = new Dog("", "20-10-2002", "info text", new Breed("mops", "info"));
+        Dog newDog = new Dog("", "20-10-2002", "info text", "mops");
         
          Exception exception = assertThrows(DogException.class, () -> {
          dogFacade.AddNewDog(newDog, "bobby");
@@ -112,7 +122,7 @@ public class DogFacadeTest {
     public void negativeTestAddDogNoDate() throws API_Exception, DogException{
             EntityManager em = emf.createEntityManager();
         
-        Dog newDog = new Dog("testDog", "", "info text", new Breed("mops", "info"));
+        Dog newDog = new Dog("testDog", "", "info text", "mop");
         
          Exception exception = assertThrows(DogException.class, () -> {
          dogFacade.AddNewDog(newDog, "bobby");
@@ -125,6 +135,17 @@ public class DogFacadeTest {
         
         
     }
+    
+    
+   @Test 
+   public void testGetAllDogsOfUser(){
+       
+         EntityManager em = emf.createEntityManager();
+         
+       User u = em.find(User.class, "dogman");
+         assertTrue(u.getDogs().size() == 1);
+       
+   }
   
 
 }

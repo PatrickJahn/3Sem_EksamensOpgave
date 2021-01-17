@@ -28,8 +28,6 @@ public class Breed implements Serializable {
     
     private String info;
     
-    @OneToMany(mappedBy = "breed")
-    private List<Dog> dogs;
 
     public Breed() {}
     
@@ -54,13 +52,7 @@ public class Breed implements Serializable {
         this.info = info;
     }
 
-    public List<Dog> getDogs() {
-        return dogs;
-    }
-
-    public void setDogs(List<Dog> dogs) {
-        this.dogs = dogs;
-    }
+  
     
 
    

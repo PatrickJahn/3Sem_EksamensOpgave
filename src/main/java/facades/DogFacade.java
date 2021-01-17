@@ -7,10 +7,13 @@ package facades;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.dogDTO;
 import entities.Breed;
 import entities.Dog;
 import entities.User;
 import errorhandling.API_Exception;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import security.errorhandling.DogException;
@@ -44,6 +47,28 @@ public class DogFacade {
     
     
     
+    
+    public List<dogDTO> getUsersDogs(String username) throws DogException{
+        
+        List<dogDTO> dogs = new ArrayList<>();
+        
+         EntityManager em = emf.createEntityManager();
+          
+          try {
+              
+         User user = em.find(User.class, username);
+         
+         for (Dog d : user.getDogs()){
+             dogs.add(new dogDTO(d));
+         }
+         
+          } catch (Exception e){
+              throw new DogException(e.getMessage());
+          }
+        return dogs;
+    }
+    
+    
    public Dog AddNewDog(Dog newDog, String userName) throws API_Exception, DogException{
        EntityManager em = emf.createEntityManager();
        
@@ -58,10 +83,7 @@ public class DogFacade {
        try {
             em.getTransaction().begin();
             
-            Breed breed = em.find(Breed.class, newDog.getBreed().getBreed());
-            if (breed == null){
-                em.persist(new Breed(newDog.getBreed().getBreed(), newDog.getBreed().getInfo()));
-            }
+         
             
            User user = em.find(User.class, userName);
            newDog.setUser(user);

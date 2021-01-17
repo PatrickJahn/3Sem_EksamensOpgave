@@ -30,15 +30,15 @@ public class Dog implements Serializable {
     private String dateOfBirth;
     private String info;
     
-    @ManyToOne()
-    private Breed breed; 
-    @ManyToOne()
+    private String breed; 
+    
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
     
     public Dog(){}
     
-    public Dog(String name, String dateOfBitrh, String info, Breed breed) {
+    public Dog(String name, String dateOfBitrh, String info, String breed) {
         this.name = name;
         this.dateOfBirth = dateOfBitrh;
         this.info = info;
@@ -81,11 +81,11 @@ public class Dog implements Serializable {
         this.info = info;
     }
 
-    public Breed getBreed() {
+    public String getBreed() {
         return breed;
     }
 
-    public void setBreed(Breed breed) {
+    public void setBreed(String breed) {
         this.breed = breed;
     }
     
