@@ -2,12 +2,13 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.searchesDTO;
 import entities.Breed;
 import entities.User;
 import facades.DogFacade;
 import facades.RemoteServerFacade;
 import facades.UserFacade;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
@@ -92,8 +93,6 @@ public class DemoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("adduser")
     public String addNewUser(String user) throws AuthenticationException {
-   
-
             User newUser = GSON.fromJson(user, User.class);
             
             FACADE.addNewUser(newUser);
@@ -102,9 +101,10 @@ public class DemoResource {
     }
     
     
-     @GET
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("admin/searches")
+    @RolesAllowed("admin")
     public String getAllSearches() throws DogException {
             long count = dogFACADE.getAllSearches();
           return "{\"searches\": \""+ count+ "\"}";
@@ -113,6 +113,7 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("admin/searches/{breed}")
+    @RolesAllowed("admin")
     public String getAllSearchesForBreed(@PathParam("breed") String breed) throws DogException {
             long count = dogFACADE.getAllSearchesForBreed(breed);
           return "{\"searches\": \""+ count+ "\"}";
@@ -121,14 +122,15 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("admin/allsearches")
+    @RolesAllowed("admin")
     public String getAllSearchesForAllBreeds() throws DogException {
             List<Breed> breeds = dogFACADE.getAllSearchesForAllBreeds();
             
-            HashMap<String, Number> d = new HashMap(); 
+           List<searchesDTO> searches = new ArrayList();
             for (Breed b : breeds){
-                d.put(b.getBreed(), b.getSearches().size());
+             searches.add(new searchesDTO(b));
             }
             
-          return GSON.toJson(d);
+          return GSON.toJson(searches);
     }
 }   

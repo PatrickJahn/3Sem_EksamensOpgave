@@ -32,7 +32,7 @@ public class Dog implements Serializable {
     
     private String breed; 
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private User user;
 
     
@@ -50,7 +50,6 @@ public class Dog implements Serializable {
     }
 
     public void setUser(User user) {
-        user.addDog(this);
         this.user = user;
     }
 

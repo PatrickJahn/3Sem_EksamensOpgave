@@ -101,8 +101,28 @@ public class User implements Serializable {
     public List<Dog> getDogs() {
         return dogs;
     }
+    
+    public Dog getDogByID(Long id){
+        for (Dog d : this.dogs){
+            if (d.getId() == id ){
+                return d;
+            }
+        }
+        return null;
+        
+        }
 
+    
+    public void removeDog(Long id){
+        for (int x = 0; x < this.dogs.size(); x++){
+           if (this.dogs.get(x).getId() == id){
+               this.dogs.remove(x);
+               return;
+           }
+        }
+    }
     public void addDog(Dog dog) {
+        dog.setUser(this);
         this.dogs.add(dog);
     }
 

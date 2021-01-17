@@ -41,14 +41,12 @@ public class DogFacadeTest {
         dog.setUser(u2);
      
          em.getTransaction().begin();
-              em.createQuery("delete from Dog").executeUpdate();
-                  em.createQuery("delete from Breed").executeUpdate();
          
+           em.createQuery("delete from Dog").executeUpdate();         
            em.createQuery("delete from User").executeUpdate();
-        
       
          em.persist(u);
-           em.persist(u2);
+         em.persist(u2);
          em.persist(dog);
          em.getTransaction().commit();
 
@@ -137,16 +135,7 @@ public class DogFacadeTest {
     }
     
     
-   @Test 
-   public void testGetAllDogsOfUser(){
-       
-         EntityManager em = emf.createEntityManager();
-         
-       User u = em.find(User.class, "dogman");
-         assertTrue(u.getDogs().size() == 1);
-       
-   }
-   
+  
    
    
    

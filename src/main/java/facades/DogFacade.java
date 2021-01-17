@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import static org.eclipse.persistence.expressions.ExpressionOperator.count;
 import security.errorhandling.DogException;
@@ -87,11 +88,8 @@ public class DogFacade {
        try {
             em.getTransaction().begin();
             
-         
-            
            User user = em.find(User.class, userName);
-           newDog.setUser(user);
-           em.persist(newDog);
+           user.addDog(newDog);
            em.getTransaction().commit();
            
        } catch (Exception e){
@@ -105,6 +103,54 @@ public class DogFacade {
        return newDog;
    }
     
+    public Dog EditDog(Dog newDog, String userName) throws API_Exception, DogException{
+       EntityManager em = emf.createEntityManager();
+       
+       try {
+            em.getTransaction().begin();
+            
+           Dog d = em.find(Dog.class, newDog.getId());
+           
+           d.setName(newDog.getName());
+           d.setBreed(newDog.getBreed());
+           d.setDateOfBitrh(newDog.getDateOfBitrh());
+           d.setInfo(newDog.getInfo());
+           em.getTransaction().commit();
+           
+       } catch (Exception e){
+           
+           throw new API_Exception(e.getMessage());
+           
+       } finally {
+           em.close();
+       }
+       
+       return newDog;
+   }
+    
+    
+    public void DeleteDog(Long id, String username) throws API_Exception, DogException{
+       EntityManager em = emf.createEntityManager();
+       
+       try {
+            em.getTransaction().begin();
+          User user = em.find(User.class, username);
+         Dog d = user.getDogByID(id);
+         user.removeDog(id);
+         em.remove(d);
+   
+           em.getTransaction().commit();
+           
+       } catch (Exception e){
+           
+           throw new API_Exception(e.getMessage());
+           
+       } finally {
+           em.close();
+       }
+       
+       
+   }
    
    
    public long getAllSearches() throws DogException{

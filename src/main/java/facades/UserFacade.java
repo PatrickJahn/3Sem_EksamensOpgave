@@ -60,6 +60,7 @@ public class UserFacade {
         
           User user = new User(newUser.getUserName(), newUser.getUserPass());
       
+          
             user.addRole(new Role("user"));
          
         try {

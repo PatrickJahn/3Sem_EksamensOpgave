@@ -14,12 +14,14 @@ import entities.Dog;
 public class dogDTO {
     
     
+    Long id;
     String name;
     String dateOfBirth;
     String Info;
     String breed;
 
     public dogDTO(Dog dog) {
+        this.id = dog.getId();
         this.name = dog.getName();
         this.Info = dog.getInfo();
         this.dateOfBirth = dog.getDateOfBitrh();

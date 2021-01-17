@@ -61,15 +61,6 @@ public class RemoteServerFacadeTest {
      
     }
     
-   @Test
-   public void testGetBreedDetails() throws InterruptedException, ExecutionException, API_Exception{
-       
-          breedDetailDTO details = facade.getDetailsOfBreed("boxer");
-            
-          String expectedResult = "boxer";
-          String result = details.getBreed();
-          assertEquals(expectedResult, result );
-          
-   }
+  
     
 }
