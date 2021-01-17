@@ -1,8 +1,7 @@
-[![Build Status](https://travis-ci.org/PatrickJahn/ca3_personal.svg?branch=master)](https://travis-ci.org/PatrickJahn/ca3_personal)
+[![Build Status](https://travis-ci.org/PatrickJahn/3Sem_EksamensOpgave.svg?branch=master)](https://travis-ci.org/PatrickJahn/3Sem_EksamensOpgave)
+## OBS Link til frontend del:  https://github.com/PatrickJahn/ca3_pesonal_frontend
 
-# OBS Link til frontend del:  https://github.com/PatrickJahn/ca3_pesonal_frontend
-
-## CA3 - How to use
+## Eksamens Opgave - How to use
 ### Preconditions
 *In order to use this code, you should have a local developer setup + a "matching" droplet on Digital Ocean as described in the 3. semester guidelines.* 
 
