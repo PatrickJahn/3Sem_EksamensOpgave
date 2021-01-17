@@ -7,7 +7,10 @@ package facades;
  */
 
 import dto.breedDTO;
+import dto.breedDetailDTO;
+import errorhandling.API_Exception;
 import facades.RemoteServerFacade;
+import java.util.concurrent.ExecutionException;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -53,12 +56,20 @@ public class RemoteServerFacadeTest {
     public void testGetAllBreeds() throws Exception {
         System.out.println("getAllBreeds");
       
-       
            breedDTO result = facade.getAllBreeds();
             assertTrue(result.getDogs().size() > 0);
      
     }
     
-    
+   @Test
+   public void testGetBreedDetails() throws InterruptedException, ExecutionException, API_Exception{
+       
+          breedDetailDTO details = facade.getDetailsOfBreed("boxer");
+            
+          String expectedResult = "boxer";
+          String result = details.getBreed();
+          assertEquals(expectedResult, result );
+          
+   }
     
 }

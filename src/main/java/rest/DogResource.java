@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.breedDTO;
+import dto.breedDetailDTO;
 import dto.dogDTO;
 import entities.Dog;
 import errorhandling.API_Exception;
@@ -10,6 +11,7 @@ import facades.DogFacade;
 import facades.RemoteServerFacade;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
@@ -19,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import security.errorhandling.DogException;
@@ -62,7 +65,7 @@ public class DogResource {
         
         FACADE.AddNewDog(newDog, thisuser);
         
-        return "{\"msg\": \"Dog added for User: " + thisuser + "\"}";
+        return "{\"msg\": \"Name: " + newDog.getName() + "\"}";
    
     }
 
@@ -89,6 +92,17 @@ public class DogResource {
             breedDTO breeds = remoteFACADE.getAllBreeds();
        
           return GSON.toJson(breeds.getDogs());
+    }
+    
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("breeds/{breed}")
+    public String getBreeds(@PathParam("breed") String breed) throws IOException, API_Exception, InterruptedException, ExecutionException {
+    
+             breedDetailDTO details = remoteFACADE.getDetailsOfBreed(breed);
+       
+          return GSON.toJson(details);
     }
     
 }   

@@ -71,6 +71,7 @@ public class RenameMeResourceTest {
           
               em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
+             em.createQuery("delete from Dog").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
 
@@ -141,5 +142,23 @@ public class RenameMeResourceTest {
                 .body("breed[0]", equalTo("beagle"));
     }
     
-   
+    @Test
+    public void testGetBreedDetail() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/dog/breeds/boxer").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("breed", equalTo("boxer"));
+    }
+    
+      @Test
+    public void testGetBreedDetailWrongBreed() throws Exception {
+        given()
+                .contentType("application/json")
+                .get("/dog/breeds/notABreed").then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST_400.getStatusCode())
+                .body("message", equalTo("Wrong breed or server is down"));
+    }
 }
